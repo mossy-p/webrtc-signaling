@@ -14,12 +14,14 @@ const (
 
 // SignalMessage represents a WebRTC signaling message
 type SignalMessage struct {
-	Type     SignalType  `json:"type"`
-	From     string      `json:"from,omitempty"`
-	To       string      `json:"to,omitempty"`
-	RoomID   string      `json:"roomId"`
-	Payload  interface{} `json:"payload,omitempty"`
-	Error    string      `json:"error,omitempty"`
+	Type      SignalType  `json:"type"`
+	From      string      `json:"from,omitempty"`
+	To        string      `json:"to,omitempty"`
+	RoomID    string      `json:"roomId"`
+	SDP       string      `json:"sdp,omitempty"`
+	Candidate interface{} `json:"candidate,omitempty"`
+	Payload   interface{} `json:"payload,omitempty"`
+	Error     string      `json:"error,omitempty"`
 }
 
 // Peer represents a connected peer in a room
