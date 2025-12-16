@@ -39,6 +39,9 @@ func main() {
 	apiGroup := router.Group("/api")
 	apiGroup.Use(handlers.OriginFilter(cfg.AllowedOrigins))
 	{
+		// Login endpoint (public)
+		apiGroup.POST("/auth/login", handlers.Login(cfg.JWTSecret))
+
 		// Create room (requires JWT)
 		apiGroup.POST("/rooms", middleware.JWTAuth(cfg.JWTSecret), handlers.CreateRoom)
 
