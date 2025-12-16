@@ -30,6 +30,9 @@ func main() {
 
 	router := gin.Default()
 
+	// Global CORS middleware (runs before routing)
+	router.Use(handlers.OriginFilter(cfg.AllowedOrigins))
+
 	// Health check endpoint
 	router.GET("/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{"status": "ok"})
@@ -37,7 +40,6 @@ func main() {
 
 	// Room management API (authenticated)
 	apiGroup := router.Group("/api")
-	apiGroup.Use(handlers.OriginFilter(cfg.AllowedOrigins))
 	{
 		// Login endpoint (public)
 		apiGroup.POST("/auth/login", handlers.Login(cfg.JWTSecret))
@@ -52,9 +54,8 @@ func main() {
 		apiGroup.DELETE("/rooms/:roomId", middleware.JWTAuth(cfg.JWTSecret), handlers.DeleteRoom)
 	}
 
-	// WebSocket signaling endpoint (with origin filtering)
+	// WebSocket signaling endpoint
 	wsGroup := router.Group("/ws")
-	wsGroup.Use(handlers.OriginFilter(cfg.AllowedOrigins))
 	{
 		// WebSocket signaling - accepts room code or ID
 		wsGroup.GET("/signal/:roomId", handlers.HandleSignaling)
